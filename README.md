@@ -24,7 +24,10 @@ Data is saved to `teamup_state.json` locally and survives restarts.
 
 ---
 
-## Deploying to Streamlit Community Cloud (for real signups)
+## Deploying to Streamlit Community Cloud (owner setup — done once)
+
+> **Members never touch this.** You deploy the app once, Streamlit gives you a
+> public URL, and members just open that link in any browser to sign up.
 
 Streamlit Cloud's filesystem is **ephemeral** — files get wiped whenever the
 app sleeps or redeploys. Wire up Google Sheets first so signup data survives.
@@ -107,15 +110,17 @@ Copy each value directly from your downloaded JSON key file.
 2. Paste the same content you put in `secrets.toml` directly into the text box.
 3. Click **Save**. The app will restart and pick up the credentials.
 
-### Step 5 — Deploy
+### Step 5 — Deploy (owner only, done once)
 
-1. Push your repo to GitHub (if you haven't already).
+1. Push this repo to GitHub (if you haven't already).
 2. Go to [share.streamlit.io](https://share.streamlit.io) → **New app**.
 3. Select your repo, branch `main`, main file `app.py`.
 4. Click **Deploy**.
 
-Once deployed, every person who submits the Join form writes a row into your
-Google Sheet permanently — surviving any sleep, restart, or redeploy.
+Streamlit gives you a public URL like `https://teamup-mac.streamlit.app`.
+**Share that link with your members — they don't install anything, they just
+open it in a browser and fill in the Join form.** Every submission writes a row
+into your Google Sheet permanently, surviving any sleep, restart, or redeploy.
 
 ---
 
