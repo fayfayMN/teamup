@@ -7,6 +7,9 @@ venv/
 # Persisted state (runtime data, not source)
 teamup_state.json
 
+# Secrets — never commit
+.streamlit/secrets.toml
+
 # Editor / OS
 .vscode/
 .idea/
