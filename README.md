@@ -4,6 +4,8 @@ Form a great team for your competition or project — matched on complementary
 skills, shared availability, and aligned commitment. Takes about 10 minutes
 from "strangers" to "we have a working agreement."
 
+**👉 Open the app: https://teamup-frsxgpqc2hqw8wizwsq8rs.streamlit.app**
+
 ---
 
 ## How to use it
