@@ -12,13 +12,25 @@ st.title("✍️ Join the pool")
 st.caption("Be honest about availability and commitment — mismatched stakes is the "
            "single biggest silent team killer.")
 
-SLOTS = ["mon-eve", "tue-eve", "wed-eve", "thu-eve", "fri-eve", "sat-day", "sun-day"]
+SLOTS = ["Mon evening", "Tue evening", "Wed evening", "Thu evening",
+         "Fri evening", "Sat daytime", "Sun daytime"]
 
 with st.form("join"):
     name = st.text_input("Name")
     skills = st.multiselect("What you're good at (pick your real strengths)", SKILLS)
     learn = st.multiselect("What you want to learn (optional)", SKILLS)
-    avail = st.multiselect("When you're available", SLOTS, default=["sat-day"])
+
+    st.markdown("**When you're available**")
+    avail_preset = st.multiselect(
+        "Common slots — tick all that apply",
+        SLOTS,
+        label_visibility="collapsed",
+    )
+    avail_custom = st.text_input(
+        "Other times (optional)",
+        placeholder="e.g. Weekday mornings, Fri afternoon, anytime after 9pm",
+    )
+
     hours = st.slider("Hours per week you can commit", 1, 40, 8)
     commit = st.select_slider(
         "How serious are you?",
@@ -32,6 +44,13 @@ if submitted:
     if not name or not skills:
         st.error("Name and at least one skill are required.")
     else:
+        # Merge preset ticks + free-text custom slots into one list.
+        avail = list(avail_preset)
+        if avail_custom.strip():
+            avail += [s.strip() for s in avail_custom.split(",") if s.strip()]
+        if not avail:
+            avail = ["flexible"]
+
         pid = f"p{len(st.session_state.pool) + 1}_{name.lower().replace(' ', '')}"
         st.session_state.pool.append(Profile(
             id=pid, name=name, skills=skills, wants_to_learn=learn,
