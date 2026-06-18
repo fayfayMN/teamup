@@ -14,9 +14,18 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Opens at `http://localhost:8501`. A demo pool of 8 people is preloaded so you
-can try matching immediately. All data persists to `teamup_state.json` and
-survives restarts.
+Opens at `http://localhost:8501`. The app **starts empty** — real people join
+on the **Join** page. To try matching without real data, click **Load demo
+data** on the Join page to add 8 sample people (and **Clear pool** to reset).
+
+### Data persistence — important for deployment
+
+Locally, data is saved to `teamup_state.json` and survives restarts.
+
+On **Streamlit Community Cloud** the filesystem is *ephemeral* — that JSON file
+is wiped whenever the app sleeps or redeploys. For a real signup where people
+join over days, wire up a free persistent datastore instead (Google Sheets via
+`st-gsheets-connection`, or Supabase's free Postgres tier). See `plan.md` (v2).
 
 ## How to use it
 

@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from teamup.store import init_state, save
+from teamup.store import init_state, save, demo_pool
 from teamup.match import Profile, SKILLS, COMMITMENT
 
 st.set_page_config(page_title="Join · TeamUp", page_icon="✍️", layout="wide")
@@ -42,8 +42,22 @@ if submitted:
 
 st.divider()
 st.markdown("#### Current pool")
+
+# Demo / reset controls. A real deployment starts empty — these are opt-in.
+bc1, bc2, _ = st.columns([1, 1, 2])
+if bc1.button("Load demo data", help="Add 8 sample people to try matching"):
+    have = {p.id for p in st.session_state.pool}
+    st.session_state.pool.extend(p for p in demo_pool() if p.id not in have)
+    save(st)
+    st.rerun()
+if bc2.button("Clear pool", help="Remove everyone (real and demo)"):
+    st.session_state.pool = []
+    st.session_state.teams_locked = []
+    save(st)
+    st.rerun()
+
 if not st.session_state.pool:
-    st.caption("Empty.")
+    st.caption("Empty — add real people above, or load demo data to try it out.")
 else:
     st.dataframe(
         [{

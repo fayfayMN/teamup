@@ -41,12 +41,14 @@ def init_state(st) -> None:
         ss.pool = [Profile(**d) for d in saved.get("pool", [])]
         ss.teams_locked = saved.get("teams_locked", [])
     else:
-        ss.pool = _demo_pool()
+        # Start EMPTY so a fresh deployment holds only real people who join.
+        # Demo data is opt-in via the "Load demo data" button on the Join page.
+        ss.pool = []
         ss.teams_locked = []
     ss._inited = True
 
 
-def _demo_pool():
+def demo_pool():
     return [
         Profile("p1", "Alex", ["Python / coding", "Data / ML"], ["Pitching / presenting"],
                 ["mon-eve", "wed-eve", "sat-day"], 12, 3),
