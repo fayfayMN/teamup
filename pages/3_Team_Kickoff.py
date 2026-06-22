@@ -13,7 +13,20 @@ st.caption("Spend the first 30 minutes on people, not ideas. This produces a wor
            "agreement the whole team signs off on — your defense against free riders "
            "and credit-takers later.")
 
-team_name = st.text_input("Team / project name", placeholder="e.g. HackMAC 2026")
+# One-click demo fill: populates the team name + domain owners so you can show a
+# complete working agreement instantly. (The rules below come pre-filled already.)
+_EXAMPLE = {
+    "kick_team": "HackMAC 2026",
+    "own_Build": "Mia", "own_Design": "Sam", "own_Pitch": "Jess",
+    "own_Organize": "Kim", "own_Integrator (watches the whole picture)": "Alex",
+}
+if st.button("✨ Fill with an example team"):
+    for _k, _v in _EXAMPLE.items():
+        st.session_state[_k] = _v
+    st.rerun()
+
+team_name = st.text_input("Team / project name", key="kick_team",
+                          placeholder="e.g. HackMAC 2026")
 
 st.markdown("#### 1. Domain owners (one per area — not a leader for everything)")
 ROLES = ["Build", "Design", "Pitch", "Organize", "Integrator (watches the whole picture)"]
