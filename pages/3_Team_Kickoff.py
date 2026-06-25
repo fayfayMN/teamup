@@ -40,6 +40,23 @@ decision = st.text_input(
     value="The domain owner decides after 10 minutes of disagreement, and we move on.",
 )
 
+st.markdown("#### 2a. Scope & approval boundaries")
+st.caption("Who decides alone vs. what needs the group — so no one person becomes the "
+           "sole gatekeeper.")
+boundaries = st.text_input(
+    "Our boundary rule:",
+    value="Owners decide within their area. Anything public-facing, team-branded, or "
+          "cross-area needs a quick group sign-off — no single gatekeeper.",
+)
+
+st.markdown("#### 2b. Change & review window")
+st.caption("Stops work being reversed or wiped on a whim.")
+change_rule = st.text_input(
+    "How do we change a decision already made?",
+    value="A logged proposal gets a 48-hour written review window before it locks. "
+          "Changing it needs a written counter-proposal, not a verbal override.",
+)
+
 st.markdown("#### 3. Check-ins")
 checkins = st.text_input("When do we sync?",
                          value="At the midpoint and 2 hours before the deadline.")
@@ -67,9 +84,20 @@ if st.button("Generate working agreement", type="primary"):
     lines += [
         "",
         f"## How we decide\n{decision}",
+        f"\n## Scope & approval boundaries\n{boundaries}",
+        f"\n## Change & review window\n{change_rule}",
         f"\n## Check-ins\n{checkins}",
         f"\n## If someone goes quiet\n{quiet}",
         f"\n## Credit\n{credit}",
+        "",
+        "## Decision log (start here)",
+        "Write one line every time you decide something — this is what stops silent "
+        "reversals and lost credit.",
+        "",
+        "| Date | Decision | Owner | Approved by | Shared on |",
+        "|------|----------|-------|-------------|-----------|",
+        "| 2026-07-01 | Pilot the workshop | (owner) | Group sign-off | Team channel |",
+        "|  |  |  |  |  |",
         "",
         "_Agreed by all members at kickoff. Revisit at the midpoint check-in._",
     ]
