@@ -103,7 +103,7 @@ if st.button("Generate working agreement", type="primary"):
         "",
         "| Date | Decision | Owner | Approved by | Shared on |",
         "|------|----------|-------|-------------|-----------|",
-        "| 2026-07-01 | Pilot the workshop | (owner) | Group sign-off | Team channel |",
+        "| _(example)_ | the decision you made | (owner) | (who signed off) | (where you shared it) |",
         "|  |  |  |  |  |",
         "",
         f"## 📅 Review by\nRevisit this whole agreement by **{review_by}**. "
