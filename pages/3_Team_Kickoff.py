@@ -1,6 +1,8 @@
 """Team Kickoff — the differentiator. A guided 30-minute launch that outputs a
 working agreement. This is where most matching tools stop and most teams fail."""
 
+from datetime import date, timedelta
+
 import streamlit as st
 
 from teamup.store import init_state
@@ -75,6 +77,11 @@ credit = st.text_input(
           "Clearwork so the record is immutable.",
 )
 
+st.markdown("#### 6. Review date")
+st.caption("Put it on the calendar — an agreement no one revisits quietly dies.")
+review_by = st.date_input("Revisit this whole agreement by:",
+                          value=date.today() + timedelta(days=90))
+
 st.divider()
 if st.button("Generate working agreement", type="primary"):
     lines = [f"# Working agreement — {team_name or 'our team'}", ""]
@@ -99,7 +106,11 @@ if st.button("Generate working agreement", type="primary"):
         "| 2026-07-01 | Pilot the workshop | (owner) | Group sign-off | Team channel |",
         "|  |  |  |  |  |",
         "",
-        "_Agreed by all members at kickoff. Revisit at the midpoint check-in._",
+        f"## 📅 Review by\nRevisit this whole agreement by **{review_by}**. "
+        "An agreement no one revisits quietly dies.",
+        "",
+        "_Agreed by all members at kickoff. Revisit at the midpoint check-in and on "
+        "the review date above._",
     ]
     md = "\n".join(lines)
     st.success("Copy this, paste it in your team channel, and have everyone react ✅.")
