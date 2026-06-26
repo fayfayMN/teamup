@@ -78,7 +78,7 @@ credit = st.text_input(
 )
 
 st.markdown("#### 6. Review date")
-st.caption("Put it on the calendar — an agreement no one revisits quietly dies.")
+st.caption("Put it on the calendar so the agreement stays current.")
 review_by = st.date_input("Revisit this whole agreement by:",
                           value=date.today() + timedelta(days=90))
 
@@ -106,8 +106,8 @@ if st.button("Generate working agreement", type="primary"):
         "| _(example)_ | the decision you made | (owner) | (who signed off) | (where you shared it) |",
         "|  |  |  |  |  |",
         "",
-        f"## 📅 Review by\nRevisit this whole agreement by **{review_by}**. "
-        "An agreement no one revisits quietly dies.",
+        f"## 📅 Review by\nRevisit this whole agreement by **{review_by}** so it "
+        "stays current.",
         "",
         "_Agreed by all members at kickoff. Revisit at the midpoint check-in and on "
         "the review date above._",
