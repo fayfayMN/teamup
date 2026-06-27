@@ -5,7 +5,7 @@ from datetime import date, timedelta
 
 import streamlit as st
 
-from teamup.comm import STYLES as COMM_STYLES, recommend, style as comm_style
+from teamup.comm import STYLES as COMM_STYLES, DIRECTNESS, recommend, style as comm_style
 from teamup.store import init_state
 
 st.set_page_config(page_title="Team Kickoff · TeamUp", page_icon="🚀", layout="wide")
@@ -108,6 +108,20 @@ with st.expander("📊 Compare all 4 styles"):
         for s in COMM_STYLES
     ])
 
+# ── Directness: interpersonal layer under the channel choice ──────────────
+st.markdown("#### 4a. Communication directness")
+st.caption("Same channel, different tone. Agreeing on how directly people speak "
+           "prevents the #1 interpersonal friction: one person thinks they're being "
+           "clear, the other thinks they're being rude (or vague).")
+_d_names = [d["name"] for d in DIRECTNESS]
+chosen_directness_name = st.radio(
+    "How directly do we speak to each other?",
+    _d_names, index=1,  # default: Balanced
+    help="Direct = explicit asks and feedback. Indirect = suggestions and context "
+         "before conclusions. Balanced = direct on facts, softer on people.")
+chosen_directness = next(d for d in DIRECTNESS if d["name"] == chosen_directness_name)
+st.caption(chosen_directness["detail"])
+
 channel_tool = st.text_input(
     "Which channel/tool do we use, concretely?",
     value="One shared Slack/Discord/group chat for all team business — no side DMs "
@@ -151,6 +165,7 @@ if st.button("Generate working agreement", type="primary"):
         f"\n## Change & review window\n{change_rule}",
         f"\n## Check-ins\n{checkins}",
         f"\n## Communication style\n**{chosen['name']}.** {channel_tool}\n\n"
+        f"_Directness: {chosen_directness['name'].lower()}. {chosen_directness['detail']}_\n\n"
         f"_Trade-off: record {chosen['record'].lower()}; scales {chosen['scales'].lower()}. "
         f"Watch out — {chosen['watch_out']}_"
         + ("" if chosen["key"] == rec_key else
