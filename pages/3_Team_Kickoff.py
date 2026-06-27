@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 import streamlit as st
 
+from teamup.comm import STYLES as COMM_STYLES, recommend, style as comm_style
 from teamup.store import init_state
 
 st.set_page_config(page_title="Team Kickoff · TeamUp", page_icon="🚀", layout="wide")
@@ -64,13 +65,53 @@ checkins = st.text_input("When do we sync?",
                          value="At the midpoint and 2 hours before the deadline.")
 
 st.markdown("#### 4. Communication style")
-st.caption("Where decisions live and how fast people respond — the #1 thing teams "
-           "never agree on until it's already a problem.")
-comm_channel = st.text_input(
-    "Where and how do we communicate?",
-    value="One shared channel (Slack/Discord/group chat) for decisions — no side DMs "
-          "for team business. Async by default; respond within 24 hours or flag "
-          "you're blocked.",
+st.caption("How a team communicates is the #1 thing it never agrees on until it's "
+           "already a problem. Pick your team type and size, and we'll recommend the "
+           "style that fits — and show what each one costs.")
+
+# Team type drives the recommendation (so it adapts, instead of assuming a project team).
+_KIND_LABELS = {
+    "Project / hackathon team": "team",
+    "Club / student org": "club",
+    "Startup": "startup",
+    "Nonprofit / volunteer group": "nonprofit",
+    "Small business": "small business",
+}
+kind_label = st.selectbox("What kind of team is this?", list(_KIND_LABELS.keys()))
+kind = _KIND_LABELS[kind_label]
+
+# Size = how many owners are actually filled in above.
+team_size = sum(1 for who in owners.values() if (who or "").strip()) or 1
+
+rec_key, why = recommend(kind, team_size)
+rec_style = comm_style(rec_key)
+st.info(f"**Recommended for a {kind_label.lower()} of {team_size}: "
+        f"{rec_style['name']}** — {why}")
+
+# Let them choose (defaulting to the recommendation) and see what they picked costs.
+_names = [s["name"] for s in COMM_STYLES]
+_default_idx = next(i for i, s in enumerate(COMM_STYLES) if s["key"] == rec_key)
+chosen_name = st.radio("Our communication style:", _names, index=_default_idx)
+chosen = next(s for s in COMM_STYLES if s["name"] == chosen_name)
+st.caption(f"⚖️ **Trade-offs:** speed {chosen['speed'].lower()} · record: "
+           f"{chosen['record'].lower()} · scales: {chosen['scales'].lower()}. "
+           f"**Watch out:** {chosen['watch_out']}")
+if chosen["key"] != rec_key:
+    st.warning(f"You picked **{chosen['name']}**, but for this team we'd suggest "
+               f"**{rec_style['name']}**. That's fine — just go in with eyes open about "
+               "the trade-off above.")
+
+with st.expander("📊 Compare all 4 styles"):
+    st.table([
+        {"Style": s["name"], "Speed": s["speed"], "Leaves a record": s["record"],
+         "Who's included": s["inclusion"], "Scales": s["scales"]}
+        for s in COMM_STYLES
+    ])
+
+channel_tool = st.text_input(
+    "Which channel/tool do we use, concretely?",
+    value="One shared Slack/Discord/group chat for all team business — no side DMs "
+          "for decisions. Respond within 24 hours or flag you're blocked.",
 )
 escalation = st.text_input(
     "When something is stuck or urgent, what do we do?",
@@ -109,7 +150,12 @@ if st.button("Generate working agreement", type="primary"):
         f"\n## Scope & approval boundaries\n{boundaries}",
         f"\n## Change & review window\n{change_rule}",
         f"\n## Check-ins\n{checkins}",
-        f"\n## Communication style\n{comm_channel}",
+        f"\n## Communication style\n**{chosen['name']}.** {channel_tool}\n\n"
+        f"_Trade-off: record {chosen['record'].lower()}; scales {chosen['scales'].lower()}. "
+        f"Watch out — {chosen['watch_out']}_"
+        + ("" if chosen["key"] == rec_key else
+           f"\n\n_(Recommended for a {kind_label.lower()} of {team_size}: "
+           f"{rec_style['name']} — {why})_"),
         f"\n## Escalation\n{escalation}",
         f"\n## If someone goes quiet\n{quiet}",
         f"\n## Credit\n{credit}",
