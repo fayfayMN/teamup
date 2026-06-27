@@ -46,6 +46,3 @@ st.markdown(
 )
 
 st.caption("Commitment levels: " + " · ".join(f"{k}={v}" for k, v in COMMITMENT.items()))
-
-from teamup.headroom import show_sidebar_controls
-show_sidebar_controls(st)
