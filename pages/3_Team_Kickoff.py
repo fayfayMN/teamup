@@ -63,21 +63,36 @@ st.markdown("#### 3. Check-ins")
 checkins = st.text_input("When do we sync?",
                          value="At the midpoint and 2 hours before the deadline.")
 
-st.markdown("#### 4. If someone goes quiet")
+st.markdown("#### 4. Communication style")
+st.caption("Where decisions live and how fast people respond — the #1 thing teams "
+           "never agree on until it's already a problem.")
+comm_channel = st.text_input(
+    "Where and how do we communicate?",
+    value="One shared channel (Slack/Discord/group chat) for decisions — no side DMs "
+          "for team business. Async by default; respond within 24 hours or flag "
+          "you're blocked.",
+)
+escalation = st.text_input(
+    "When something is stuck or urgent, what do we do?",
+    value="Tag the domain owner directly. If no response in 24 hours, the integrator "
+          "steps in. Anything time-sensitive gets a call, not a message.",
+)
+
+st.markdown("#### 5. If someone goes quiet")
 quiet = st.text_input(
     "Our rule:",
     value="We ask what's blocking them directly — coasting is often being lost. "
           "We don't silently do their work, and we loop in the organizer early.",
 )
 
-st.markdown("#### 5. Credit")
+st.markdown("#### 6. Credit")
 credit = st.text_input(
     "How is credit handled?",
     value="Each person presents the part they built. Contributions are recorded in "
           "Clearwork so the record is immutable.",
 )
 
-st.markdown("#### 6. Review date")
+st.markdown("#### 7. Review date")
 st.caption("Put it on the calendar so the agreement stays current.")
 review_by = st.date_input("Revisit this whole agreement by:",
                           value=date.today() + timedelta(days=90))
@@ -94,6 +109,8 @@ if st.button("Generate working agreement", type="primary"):
         f"\n## Scope & approval boundaries\n{boundaries}",
         f"\n## Change & review window\n{change_rule}",
         f"\n## Check-ins\n{checkins}",
+        f"\n## Communication style\n{comm_channel}",
+        f"\n## Escalation\n{escalation}",
         f"\n## If someone goes quiet\n{quiet}",
         f"\n## Credit\n{credit}",
         "",
